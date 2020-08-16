@@ -5,7 +5,7 @@ const textInput = document.querySelector("#new-task");
 function addFunc() {
   console.log("add");
   const text = textInput.value;
-  console.log(text);
+  // console.log(text);
   // 엘리멘트들을 생성하는 부분
   const li = document.createElement("li");
   const div = document.createElement("div");

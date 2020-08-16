@@ -1,107 +1,96 @@
-const taskInput = document.getElementById("new-task");
-const addButton = document.getElementsByTagName("button")[0];
-const incompleteTaskHolder = document.getElementById("incomplete-tasks");
+const addButton = document.querySelector(".add-button");
+const todoListContainer = document.querySelector("#todolist");
+const textInput = document.querySelector("#new-task");
 
-const createNewTaskElement = function (taskString) {
-  const listItem = document.createElement("li");
+function addFunc() {
+  console.log("add");
+  const text = textInput.value;
+  console.log(text);
+  // 엘리멘트들을 생성하는 부분
+  const li = document.createElement("li");
+  const div = document.createElement("div");
+  const textDiv = document.createElement("div");
 
-  const checkBox = document.createElement("input");
+  textDiv.innerText = text;
 
-  const label = document.createElement("label");
+  // 자식에 엘리먼트 추가하는 방법
+  li.appendChild(div);
+  div.appendChild(textDiv);
+  todoListContainer.appendChild(li);
 
-  const editInput = document.createElement("input");
+  const delButton = document.createElement("button");
+  delButton.innerText = "Delete";
+  delButton.addEventListener("click", delFunc);
+  div.appendChild(delButton);
 
   const editButton = document.createElement("button");
-
-  const deleteButton = document.createElement("button");
-
-  label.innerText = taskString;
-
-  editInput.type = "text";
-
   editButton.innerText = "Edit";
-  editButton.className = "edit";
-  deleteButton.innerText = "Delete";
-  deleteButton.className = "delete";
+  editButton.addEventListener("click", editOnClick);
+  div.appendChild(editButton);
 
-  listItem.appendChild(checkBox);
-  listItem.appendChild(label);
-  listItem.appendChild(editInput);
-  listItem.appendChild(editButton);
-  listItem.appendChild(deleteButton);
-  return listItem;
-};
-
-const addTask = function () {
-  const listItem = createNewTaskElement(taskInput.value);
-
-  incompleteTaskHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskCompleted);
-
-  taskInput.value = "";
-};
-
-const editTask = function () {
-  const listItem = this.parentNode;
-
-  const editInput = listItem.querySelector("input[type=text]");
-  const label = listItem.querySelector("label");
-  const containsClass = listItem.classList.contains("editMode");
-
-  if (containsClass) {
-    label.innerText = editInput.value;
-  } else {
-    editInput.value = label.innerText;
-  }
-
-  listItem.classList.toggle("editMode");
-};
-
-const deleteTask = function () {
-  console.log("Delete Task...");
-
-  const listItem = this.parentNode;
-  const ul = listItem.parentNode;
-
-  ul.removeChild(listItem);
-};
-
-const taskCompleted = function () {
-  console.log("Complete Task...");
-
-  const listItem = this.parentNode;
-  completedTasksHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskIncomplete);
-};
-
-const taskIncomplete = function () {
-  console.log("Incomplete Task...");
-
-  const listItem = this.parentNode;
-  incompleteTaskHolder.appendChild(listItem);
-  bindTaskEvents(listItem, taskCompleted);
-};
-
-const ajaxRequest = () => {
-  console.log("AJAX Request");
-};
-
-//addButton.onclick = addTask;
-addButton.addEventListener("click", addTask);
-addButton.addEventListener("click", ajaxRequest);
-
-function bindTaskEvents(taskListItem, checkBoxEventHandler) {
-  const checkBox = taskListItem.querySelector("input[type=checkbox]");
-  const editButton = taskListItem.querySelector("button.edit");
-  const deleteButton = taskListItem.querySelector("button.delete");
-
-  editButton.onclick = editTask;
-
-  deleteButton.onclick = deleteTask;
-
-  checkBox.onchange = checkBoxEventHandler;
+  textInput.value = "";
 }
 
-for (const i = 0; i < incompleteTaskHolder.children.length; i++) {
-  bindTaskEvents(incompleteTaskHolder.children[i], taskCompleted);
+// Edit 버튼 클릭 함수
+function editOnClick(event) {
+  const editInput = document.createElement("input");
+  const target = event.target;
+  const parentDiv = target.parentNode;
+  parentDiv.appendChild(editInput);
+
+  // Edit 버튼을 Edit 완료 버튼으로 변경
+  target.remove();
+  const editConfirm = document.createElement("button");
+  editConfirm.innerText = "Confirm";
+  editConfirm.addEventListener("click", editOnConfirm);
+  parentDiv.appendChild(editConfirm);
 }
+
+// Edit 완료 버튼 클릭 함수
+function editOnConfirm(event) {
+  const target = event.target;
+  const parentDiv = target.parentNode;
+
+  const textDiv = parentDiv.children[0];
+  const editInput = parentDiv.children[2];
+  // editInput 값 div에 넣기
+  textDiv.innerText = editInput.value;
+
+  // 완료 버튼, edit input 제거
+  target.remove();
+  editInput.remove();
+
+  // 완료 후 Edit 버튼 재생성
+  const editButton = document.createElement("button");
+  editButton.innerText = "Edit";
+  editButton.addEventListener("click", editOnClick);
+  parentDiv.appendChild(editButton);
+}
+
+function delFunc(event) {
+  const target = event.target;
+  const parentLi = target.parentNode.parentNode;
+
+  parentLi.remove();
+}
+
+function init() {
+  // init 가장 먼저 시작되는 스크립트
+  // 맨 처음부터 기능을 바로 넣기 때문에 첫 로드에 필요한 엘리먼트들의 기능들을 추가해줌.
+  addButton.addEventListener("click", addFunc);
+}
+
+init();
+
+// 함수 실행
+// addFunc()
+
+// 함수를 변수로 사용
+// addFunc
+
+// const 상수명 = 값;
+// let 변수명 = 값;
+
+// 마우스 올려서 확인할 때
+// (method) 함수명<무시>(인수들): 리턴값
+// (property) 는 = 으로 값을 넣음
