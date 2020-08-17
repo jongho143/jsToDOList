@@ -1,8 +1,9 @@
 const addBtn = document.querySelector(".addButton");
+const textInut = document.querySelector(".todo_input");
 
 function addFunc() {
-  console.log("add");
   const li = document.createElement("li");
+  const text = textInput.value;
 }
 
 function init() {
