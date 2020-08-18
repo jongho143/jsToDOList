@@ -1,3 +1,5 @@
+const Pagination = document.querySelector(".pagination");
+
 const noteBookCount = 80;
 
 const noteBook = () => {
@@ -14,3 +16,11 @@ const noteBook = () => {
 
   return array;
 };
+
+function pagination() {
+  const li = document.createElement("div");
+}
+
+function init() {
+  Pagination.addEventListener("click", pagination);
+}
